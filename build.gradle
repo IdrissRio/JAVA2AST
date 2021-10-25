@@ -1,0 +1,122 @@
+plugins {
+  id 'java'
+  id 'org.jastadd' version '1.13.3'
+}
+
+defaultTasks 'jar'
+
+if (!file('extendj/jastadd_modules').exists()) {
+  throw new GradleException('ExtendJ seems to be missing. Please run "git submodule init", then "git submodule update".')
+}
+
+jastadd {
+  configureModuleBuild()
+
+  modules {
+    include("extendj/jastadd_modules") // Include core ExtendJ modules.
+
+    module "template", {
+      imports "java8 frontend" // ExtendJ dependency for template module.
+
+      jastadd {
+        basedir "src/jastadd/"
+        // include "**/*.ast"
+        // include "**/*.jadd"
+        include "**/*.jrag"
+      }
+
+      //scanner {
+      // List scanner files here.
+      //}
+
+      //parser {
+      // List parser files here.
+      //}
+    }
+  }
+
+  // Target module to build:
+  module = 'template'
+
+  astPackage = 'org.extendj.ast'
+  parser.name = 'JavaParser'
+  scanner.name = 'OriginalScanner'
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+dependencies {
+   implementation 'org.json:json:20180813'
+
+   implementation 'com.github.idrissrio:cli-table:f656a29001'
+}
+
+
+sourceSets.main {
+  java {
+    srcDir 'extendj/src/frontend-main'
+    srcDir 'src/java'
+  }
+  resources {
+    srcDir 'extendj/src/res'
+    srcDir jastadd.buildInfoDir
+  }
+  repositories {
+    mavenLocal()
+    flatDir { dirs rootProject.file("tools") }
+    
+  }
+  dependencies {
+    jastadd2 name: "jastadd2"
+    
+  }
+}
+
+// Use JavaCompiler if you need bytecode generation.
+task java2ast(type: Jar) { 
+  from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+  from sourceSets.main.output
+  manifest {
+      attributes 'Main-Class': 'org.extendj.Java2AST'
+  }
+  baseName = 'java2ast'
+  destinationDir=projectDir
+}
+
+
+artifacts {
+    archives java2ast
+}
+
+// Java -source and -target version.
+sourceCompatibility = targetCompatibility = '1.7'
+
+task sourceZip(type: Zip) {
+  description 'Builds a Zip file with the entire repisotory (including the ExtendJ submodule).'
+  destinationDir = projectDir
+  archiveName = "template-src.zip"
+
+  from (projectDir) {
+    exclude '**/.git'
+    exclude '**/.gitignore'
+    exclude '**/.gitattributes'
+    exclude '**/.gitmodules'
+    exclude 'build'
+    exclude 'bin'
+    exclude '.gradle'
+    exclude '.classpath'
+    exclude '.settings'
+    exclude '.project'
+    exclude '*.jar'
+    exclude '*.zip'
+    exclude '**/*.swp'
+  }
+
+  into 'template'
+}

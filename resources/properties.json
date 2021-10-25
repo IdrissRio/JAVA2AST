@@ -1,0 +1,44 @@
+{
+    "properties": [
+        {
+            "name": "name",
+            "command": "SAFEName",
+            "description": "If specified, displays the node name of the Abstract Syntax Tree."
+        },
+        {
+            "name": "line_start",
+            "command": "lineStart",
+            "description": "Displays the line number where the symbol begins. (Location parameter)"
+        },
+        {
+            "name": "line_end",
+            "command": "lineEnd",
+            "description": "Displays the line number where the symbol ends. (Location parameter)"
+        },
+        {
+            "name": "column_start",
+            "command": "columnStart",
+            "description": "Displays the column number where the symbol begins. (Location parameter)"
+        },
+        {
+            "name": "column_end",
+            "command": "columnEnd",
+            "description": "Displays the column number where the symbol begins. (Location parameter)"
+        },
+        {
+            "name": "rel_path",
+            "command": "SAFEPathName",
+            "description": "Displays the path name of the java file to be parsed."
+        },
+        {
+            "name": "value",
+            "command": "SAFEValue",
+            "description": "Displays the value of the identifier e.g. an integer value (4)."
+        },
+        {
+            "name": "type",
+            "command": "SAFEType",
+            "description": "Displays the type of the identifier."
+        }
+    ]
+}

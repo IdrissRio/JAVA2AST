@@ -1,0 +1,131 @@
+
+/* Copyright (c) 2021, Idriss Riouak <idriss.riouak@cs.lth.se, Momina Rizwan <momina.rizwan@cs.lth.se>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+
+ import CLI.src.Table;
+
+ aspect JAVA2AST{
+     // Aspect to generate an Abstract Syntax tree for a Java file.
+ 
+     // Collecting all the AST Nodes for each compilation unit.
+     coll Set<ASTNode> CompilationUnit.allNodes() [new HashSet<>()] with add root CompilationUnit;
+     ASTNode contributes this  when shouldContributeToAllNodes() to CompilationUnit.allNodes() for compilationUnit();
+ 
+     // Ignores the unnecessary nodes containing List and Optional.
+     syn boolean ASTNode.shouldContributeToAllNodes() = true;
+     eq List.shouldContributeToAllNodes() = false;
+     eq Opt.shouldContributeToAllNodes() =false;
+     eq Modifiers.shouldContributeToAllNodes() =false;
+ 
+ 
+     // Printing the values of the all the expressions and modifiers otherwise just print "-"
+     syn String ASTNode.SAFEValue() = "-";
+     eq Expr.SAFEValue() = prettyPrint();
+     eq Modifier.SAFEValue() = prettyPrint();
+     eq VariableDeclarator.SAFEValue() = name();
+     eq MethodDecl.SAFEValue() = name();
+     
+     // Getting path name of the source.
+     syn String ASTNode.SAFEPathName() = compilationUnit().pathName();
+ 
+     // Getting all the identifier of the AST node.
+     syn String ASTNode.SAFEName() = getClass().getSimpleName();
+ 
+     // Printing the types of the all the expressions and type declarations otherwise just print "-"
+     syn String ASTNode.SAFEType() = "-"; //If not available then '-'
+ 
+     eq Expr.SAFEType() = type().name();
+     eq TypeDecl.SAFEType() = name();
+     eq VariableDeclarator.SAFEType() = type().name();
+     eq MethodDecl.SAFEType() = type().name();
+     eq Modifier.SAFEType() = "Modifier";
+ 
+ 
+ 
+  
+     //  A class to represent all the properties of the AST. 
+     //  Fields: 
+     //          name: Name of the property
+     //          command: Invokes the property of the given node
+     //          description: Description of all the properties
+     public class Property{
+         String name;
+         String command;
+         String description;
+         public Property(String name, String command, String description){
+         this.name = name;
+         this.command = command;
+         this.description = description;
+         }
+         public String getName(){return this.name;}
+         public String getCommand(){return this.command;}
+         public String getDescription(){return this.description;}
+ 
+         @Override
+         public String toString(){
+             return name;
+         }
+     }
+ 
+ 
+     public class Replacement{
+         String type;
+         String source;
+         String destination;
+         public Replacement(String type, String source, String destination){
+             this.type = type;
+             this.source = source;
+             this.destination = destination;
+         }
+ 
+     public String getType() {return this.type;}
+     public String getSource(){return this.source;}
+     public String getDestination(){return this.destination;}
+     
+     @Override
+     public String toString(){
+         return "Type: " + getType() + ".\nSource: "+ getSource() + ". \nDestination: " + getDestination();
+     }
+     }
+ 
+ 
+     syn Integer ASTNode.lineStart() = getLine(getStart());
+     syn Integer ASTNode.lineEnd() = getLine(getEnd());
+     syn Integer ASTNode.columnStart() = getColumn(getStart());
+     eq MethodDecl.columnStart() = getColumn(getStart())+type().name().length()+1;
+     eq MethodDecl.columnEnd() =  columnStart()+ signature().indexOf("(");
+     syn Integer ASTNode.columnEnd() = getColumn(getEnd());
+     eq VariableDeclarator.columnEnd() = getColumn(getEnd())-3;
+ 
+    
+ 
+    
+ }
