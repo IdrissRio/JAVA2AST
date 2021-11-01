@@ -125,7 +125,9 @@
      syn Integer ASTNode.columnEnd() = getColumn(getEnd());
      eq VariableDeclarator.columnEnd() = getColumn(getEnd())-3;
  
-    
- 
-    
+
+     inh String ASTNode.getEnclosingClass();
+     eq ClassDecl.getChild().getEnclosingClass() = name();
+     eq Program.getChild().getEnclosingClass() = " - ";
+
  }
