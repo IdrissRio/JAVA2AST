@@ -39,6 +39,46 @@
             "name": "type",
             "command": "SAFEType",
             "description": "Displays the type of the identifier."
+        },
+        {
+            "name": "enclosing_class",
+            "command": "getEnclosingClass",
+            "description": ""
+        },
+        {
+            "name": "enclosing_method",
+            "command": "getEnclosingMethod",
+            "description": ""
+        },
+        {
+            "name": "in_a_method",
+            "command": "isInAMethod",
+            "description": ""
+        },
+        {
+            "name": "a_method",
+            "command": "isAMethod",
+            "description": ""
+        },
+        {
+            "name": "an_initaliser",
+            "command": "isAnInitialiser",
+            "description": ""
+        },
+        {
+            "name": "is_class",
+            "command": "isClass",
+            "description": ""
+        },
+        {
+            "name": "is_stmt",
+            "command": "isStmt",
+            "description": ""
+        },
+        {
+            "name": "is_expr",
+            "command": "isExpr",
+            "description": ""
         }
     ]
 }

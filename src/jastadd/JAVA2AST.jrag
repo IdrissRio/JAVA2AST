@@ -130,4 +130,35 @@
      eq ClassDecl.getChild().getEnclosingClass() = name();
      eq Program.getChild().getEnclosingClass() = " - ";
 
+     syn boolean ASTNode.isAMethod() = false;
+     eq MethodDecl.isAMethod() = true;
+
+     inh boolean ASTNode.isInAMethod();
+     eq MethodDecl.getChild().isInAMethod() = true;
+     eq Program.getChild().isInAMethod()=false;
+
+     syn boolean ASTNode.isAnInitialiser() = false;
+     eq StaticInitializer.isAnInitialiser() = true;
+     eq InstanceInitializer.isAnInitialiser() = true;
+
+     syn boolean ASTNode.isClass() = false;
+     eq ClassDecl.isClass() =true;
+
+    //  inh boolean ASTNode.isMethodParameter();
+    //  eq MethodDecl.getParameter().isMethodParameter() =true;
+    //  eq Program.getChild().isMethodParameter() = false;
+
+     syn boolean ASTNode.isStmt() = false;
+     eq Stmt.isStmt()=true;
+     
+     syn boolean ASTNode.isExpr() = false;
+     eq Expr.isExpr() = true;
+
+     inh String ASTNode.getEnclosingMethod();
+     eq MethodDecl.getChild().getEnclosingMethod() = name();
+     eq Program.getChild().getEnclosingMethod() = " - ";
+     
+
+
+
  }
