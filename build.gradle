@@ -54,7 +54,7 @@ allprojects {
 dependencies {
    implementation 'org.json:json:20180813'
 
-   implementation 'com.github.idrissrio:cli-table:65860acac8'
+   implementation 'com.github.idrissrio:cli-table:35ccd373c9'
 }
 
 

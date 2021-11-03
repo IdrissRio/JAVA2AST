@@ -30,6 +30,7 @@
 
 package org.extendj;
 
+import CLI.src.Format;
 import CLI.src.Table;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -47,12 +48,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.TreeSet;
+import lund.Property;
 import org.extendj.JavaChecker;
 import org.extendj.ast.ASTNode;
 import org.extendj.ast.CompilationUnit;
 import org.extendj.ast.Frontend;
 import org.extendj.ast.Program;
-import org.extendj.ast.Property;
 import org.json.*;
 
 /**
@@ -72,6 +73,8 @@ public class Java2AST extends Frontend {
   public static ArrayList<Property> instanceProperties =
       new ArrayList<Property>();
   public static boolean printHelp = false;
+  public static Format genformat = Format.FANCY;
+  public static Format readformat = Format.FANCY;
 
   private String[] setEnv(String[] args) throws FileNotFoundException {
     if (args.length < 1) {
@@ -95,6 +98,42 @@ public class Java2AST extends Frontend {
         String[] properties = opt.split(",");
         userProperties = new ArrayList<String>(Arrays.asList(properties));
         continue;
+      } else if (opt.startsWith("-gen=")) {
+        opt = opt.substring(5, opt.length());
+        switch (opt) {
+        case "csv":
+          genformat = Format.CSV;
+          break;
+        case "tab":
+          genformat = Format.TAB;
+          break;
+        case "fancy":
+          genformat = Format.FANCY;
+          break;
+
+        default:
+          System.err.println("error");
+          System.exit(1);
+          break;
+        }
+      } else if (opt.startsWith("-read=")) {
+        opt = opt.substring(6, opt.length());
+        switch (opt) {
+        case "csv":
+          readformat = Format.CSV;
+          break;
+        case "tab":
+          readformat = Format.TAB;
+          break;
+        case "fancy":
+          readformat = Format.FANCY;
+          break;
+
+        default:
+          System.err.println("error");
+          System.exit(1);
+          break;
+        }
       } else {
         printHelp = true;
       }
@@ -163,7 +202,7 @@ public class Java2AST extends Frontend {
     for (Property p : instanceProperties) {
       res2.add(p.getName().toUpperCase());
     }
-    Table table = new Table(res2.toArray(new String[1]));
+    Table table = new Table(res2.toArray(new String[1]), genformat, readformat);
     for (CompilationUnit unit : program.getCompilationUnits())
       printTable(unit, System.out, table);
   }
