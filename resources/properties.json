@@ -79,6 +79,11 @@
             "name": "is_expr",
             "command": "isExpr",
             "description": ""
+        },
+        {
+            "name": "reference_to",
+            "command": "getVarDecl",
+            "description": ""
         }
     ]
 }

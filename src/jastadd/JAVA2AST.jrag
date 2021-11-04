@@ -101,10 +101,6 @@
      syn boolean ASTNode.isClass() = false;
      eq ClassDecl.isClass() =true;
 
-    //  inh boolean ASTNode.isMethodParameter();
-    //  eq MethodDecl.getParameter().isMethodParameter() =true;
-    //  eq Program.getChild().isMethodParameter() = false;
-
      syn boolean ASTNode.isStmt() = false;
      eq Stmt.isStmt()=true;
      
@@ -114,8 +110,12 @@
      inh String ASTNode.getEnclosingMethod();
      eq MethodDecl.getChild().getEnclosingMethod() = name();
      eq Program.getChild().getEnclosingMethod() = " - ";
+
      
-
-
+     syn String ASTNode.getVarDecl() = "-";
+     eq VarAccess.getVarDecl() {
+         Declarator d = (Declarator) varDecl();
+         return  "<"+d.name() + "," + d.lineStart() + "," + d.columnStart() +">";
+     }
 
  }
