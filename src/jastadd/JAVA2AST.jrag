@@ -68,19 +68,14 @@
      eq MethodDecl.SAFEType() = type().name();
      eq Modifier.SAFEType() = "Modifier";
  
- 
- 
-  
-
-
- 
      syn Integer ASTNode.lineStart() = getLine(getStart());
      syn Integer ASTNode.lineEnd() = getLine(getEnd());
      syn Integer ASTNode.columnStart() = getColumn(getStart());
      eq MethodDecl.columnStart() = getColumn(getStart())+type().name().length()+1;
      eq MethodDecl.columnEnd() =  columnStart()+ signature().indexOf("(");
      syn Integer ASTNode.columnEnd() = getColumn(getEnd());
-     eq VariableDeclarator.columnEnd() = getColumn(getEnd())-3;
+     eq VariableDeclarator.columnEnd() = getColumn(IDend);
+     eq VariableDeclarator.columnStart() = getColumn(IDstart);
  
 
      inh String ASTNode.getEnclosingClass();
