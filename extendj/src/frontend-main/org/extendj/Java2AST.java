@@ -205,6 +205,7 @@ public class Java2AST extends Frontend {
     Table table = new Table(res2.toArray(new String[1]), genformat, readformat);
     for (CompilationUnit unit : program.getCompilationUnits())
       printTable(unit, System.out, table);
+    System.out.println(table);
   }
 
   static void printTable(CompilationUnit unit, PrintStream out, Table table) {
@@ -224,7 +225,6 @@ public class Java2AST extends Frontend {
       }
       table.addRow(res.toArray(new String[1]));
     }
-    out.println(table);
   }
 
   /**
