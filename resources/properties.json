@@ -81,7 +81,7 @@
             "description": ""
         },
         {
-            "name": "reference_to",
+            "name": "uniqueid",
             "command": "getVarDecl",
             "description": ""
         }

@@ -76,6 +76,11 @@
      syn Integer ASTNode.columnEnd() = getColumn(getEnd());
      eq VariableDeclarator.columnEnd() = getColumn(IDend);
      eq VariableDeclarator.columnStart() = getColumn(IDstart);
+     eq TypeDecl.columnEnd() = getColumn(IDend);
+     eq TypeDecl.columnStart() = getColumn(IDstart);
+     eq TypeDecl.lineEnd() = getLine(IDstart);
+     eq TypeDecl.lineStart() = getLine(IDstart);
+     
  
 
      inh String ASTNode.getEnclosingClass();
@@ -108,9 +113,21 @@
 
      
      syn String ASTNode.getVarDecl() = "-";
+     eq Declarator.getVarDecl(){
+        return  ""+name() + ":" + lineStart() + ":" + columnStart() +"";
+     }
      eq VarAccess.getVarDecl() {
          Declarator d = (Declarator) varDecl();
-         return  "<"+d.name() + "," + d.lineStart() + "," + d.columnStart() +">";
+         return  ""+d.name() + ":" + d.lineStart() + ":" + d.columnStart() +"";
+     }
+
+     eq TypeDecl.getVarDecl() {
+         return ""+name() + ":" + lineStart() + ":" + columnStart() +"";
+     }
+
+     eq TypeAccess.getVarDecl(){
+         TypeDecl d = decl();
+         return  ""+d.name() + ":" + d.lineStart() + ":" + d.columnStart() +"";
      }
 
  }
